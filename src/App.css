@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+.chat:hover,
+.chat-node:has(.chat-node:hover) > .chat {
+  border-color: #000;
+  background-color: #0000000c;
+}
