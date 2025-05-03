@@ -4,15 +4,36 @@ import PlusIcon from "../icons/PlusIcon";
 import User from "./User";
 import { getLLMResponse } from "../LLM";
 import ChatInput from "./ChatInput";
+import { saveConversation, getAllConversations } from "../db/conversation";
+import { buildMessageHistory } from "../utils/conversationHistory";
 
 export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
 
     async function handleUserInput(input) {
-        updateNodeData(chat.id, { user: { content: input } });
+        updateNodeData(chat.id, { user: input });
 
-        const response = await getLLMResponse(input);
+        // Fetch all conversations to reconstruct the parent chain
+        const allConversations = await getAllConversations();
+        console.log(allConversations);
+        window.allConversationsX = allConversations;
+        const messages = buildMessageHistory(chat, input, allConversations);
 
-        updateNodeData(chat.id, { assistant: { content: response } });
+        console.log(messages);
+
+        const response = await getLLMResponse(messages);
+
+        updateNodeData(chat.id, { assistant: response });
+
+        const saved = await saveConversation({
+            parentId: chat.parentId || null,
+            user: input,
+            assistant: response,
+        });
+
+        // Sync the id from IndexedDB
+        if (saved.id !== chat.id) {
+            updateNodeData(chat.id, { id: saved.id });
+        }
     }
 
     return (
@@ -20,8 +41,8 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
             <div className="flex gap-2 items-start">
                 <User name={'user'} />
                 {
-                    chat.user.content ? (
-                        <p className="text-blue-500 mt-[4px]">{chat.user.content}</p>
+                    chat.user ? (
+                        <p className="text-blue-500 mt-[4px]">{chat.user}</p>
                     ) : (
                         <ChatInput
                             onSubmit={handleUserInput}
@@ -30,13 +51,13 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
                 }
             </div>
             {
-                chat.user.content && (
+                chat.user && (
                     <div className="flex gap-2 items-start">
                         <User name={'assistant'} />
                         {
-                            chat.assistant.content ? (
+                            chat.assistant ? (
                                 <div className="markdown-body mt-[4px]">
-                                    <Markdown>{chat.assistant.content}</Markdown>
+                                    <Markdown>{chat.assistant}</Markdown>
                                 </div>
                             ) : (
                                 <Loading />
@@ -46,7 +67,7 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
                 )
             }
             {
-                chat.user.content && chat.assistant.content && (
+                chat.user && chat.assistant && (
                     <button
                         className="self-end text-white bg-blue-500 rounded-full p-1 hover:text-blue-600 hover:bg-white border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-blue-500"
                         onClick={() => onAddChild && onAddChild(chat.id)}

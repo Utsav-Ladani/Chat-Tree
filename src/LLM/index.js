@@ -6,10 +6,10 @@ const client = new OpenAI({
     dangerouslyAllowBrowser: true,
 });
 
-export async function getLLMResponse(input) {
+export async function getLLMResponse(messages) {
     const response = await client.chat.completions.create({
         model: 'ai/gemma3:latest',
-        messages: [{ role: 'user', content: input }],
+        messages,
     });
 
     console.log(response);

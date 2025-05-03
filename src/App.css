@@ -22,13 +22,16 @@
     margin-bottom: .5rem;
   }
 
-  ul {
-    padding-left: 1rem;
+  ul,ol {
+    padding-inline-start: 1.6rem;
     list-style-type: disc;
+
+    ::marker {
+      color: #565656;
+    }
   }
 
   ol {
-    padding-left: 1rem;
     list-style-type: decimal;
   }
 

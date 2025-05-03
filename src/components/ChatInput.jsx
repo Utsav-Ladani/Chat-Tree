@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function ChatInput({ onSubmit }) {
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState('Hello');
 
     function handleSubmit(e) {
         e.preventDefault();

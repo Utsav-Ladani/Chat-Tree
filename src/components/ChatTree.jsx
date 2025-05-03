@@ -1,25 +1,31 @@
 import { useState } from "react";
 import ChatNode from "./ChatNode";
 import { useRef } from "react";
+import { getAllConversations } from "../db/conversation";
+import { useEffect } from "react";
+import { buildTree } from "../utils/tree";
+
+const DEFAULT_ROOT_NODE = {
+    id: 0,
+    user: '',
+    assistant: '',
+    children: [],
+};
 
 export default function ChatTree() {
-    const [chatRootNode, setChatRootNode] = useState({
-        id: 1,
-        user: { content: "" },
-        assistant: { content: "" },
-        children: [],
-    });
+    const [chatRootNode, setChatRootNode] = useState(DEFAULT_ROOT_NODE);
     const parentRef = useRef(null);
     const [reRender, setReRender] = useState(0);
 
     function addChildNode(parentId) {
         function addChildRecursive(node) {
             if (node.id === parentId) {
-                const newId = Date.now();
+                const tempId = -Date.now();
                 const newChild = {
-                    id: newId,
-                    user: { content: "" },
-                    assistant: { content: "" },
+                    id: tempId,
+                    parentId: parentId,
+                    user: '',
+                    assistant: '',
                     children: [],
                 };
                 return {
@@ -57,6 +63,12 @@ export default function ChatTree() {
         setChatRootNode((root) => updateNodeRecursive(root));
         setReRender((prev) => prev + 1);
     }
+
+    useEffect(() => {
+        getAllConversations().then(records => {
+            setChatRootNode(buildTree(records)[0] ?? DEFAULT_ROOT_NODE);
+        });
+    }, []);
 
     return (
         <main className="p-4">
