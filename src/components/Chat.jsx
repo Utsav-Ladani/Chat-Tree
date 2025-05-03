@@ -1,3 +1,4 @@
+import PlusIcon from "../icons/PlusIcon";
 import User from "./User";
 
 export default function Chat({ chat, ref }) {
@@ -11,6 +12,14 @@ export default function Chat({ chat, ref }) {
                 <User name={'assistant'} />
                 <p className="text-gray-500 mt-1">{chat.assistant.content}</p>
             </div>
+            <button
+                className="self-end text-white bg-blue-500 rounded-full p-1 hover:text-blue-600 hover:bg-white border border-blue-500"
+                onClick={() => {
+                    console.log('clicked');
+                }}
+            >
+                <PlusIcon />
+            </button>
         </div>
     );
 }
