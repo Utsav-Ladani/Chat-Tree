@@ -2,14 +2,48 @@
 
 .chat:hover,
 .chat:focus,
-.chat-node:has(.chat:hover) > .chat,
-.chat-node:has(.chat:focus) > .chat {
+.chat-node:has(.chat:hover)>.chat,
+.chat-node:has(.chat:focus)>.chat {
   border-color: #000;
   background-color: #00000006;
 }
 
-.chat-node:has(.chat:hover) > .edge,
-.chat-node:has(.chat:focus) > .edge {
+.chat-node:has(.chat:hover)>.edge,
+.chat-node:has(.chat:focus)>.edge {
   color: #000;
   z-index: 1;
+}
+
+.markdown-body {
+
+  p,
+  ul,
+  ol {
+    margin-bottom: .5rem;
+  }
+
+  ul {
+    padding-left: 1rem;
+    list-style-type: disc;
+  }
+
+  ol {
+    padding-left: 1rem;
+    list-style-type: decimal;
+  }
+
+  code {
+    padding: 0.1rem 0.2rem;
+    color: #e5c07b;
+    background-color: #282c34;
+    border-radius: 0.3rem;
+  }
+
+  pre>code {
+    display: block;
+    border: 1px solid #3a3f4b;
+    padding: .5rem 1rem;
+    margin-block: 1rem;
+    border-radius: 0.3rem;
+  }
 }

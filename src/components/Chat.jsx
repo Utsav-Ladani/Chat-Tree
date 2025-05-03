@@ -1,7 +1,9 @@
-import { useState } from "react";
+import Markdown from 'react-markdown'
+
 import PlusIcon from "../icons/PlusIcon";
 import User from "./User";
 import { getLLMResponse } from "../LLM";
+import ChatInput from "./ChatInput";
 
 export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
 
@@ -14,12 +16,12 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
     }
 
     return (
-        <div className="chat flex flex-col gap-2 border border-gray-300 rounded-md p-2 min-w-[400px] max-w-[700px]" ref={ref} tabIndex={0}>
+        <div className="chat flex flex-col gap-3 border border-gray-300 rounded-md p-3 min-w-[400px] max-w-[700px]" ref={ref} tabIndex={0}>
             <div className="flex gap-2 items-start">
                 <User name={'user'} />
                 {
                     chat.user.content ? (
-                        <p className="text-blue-500 mt-1">{chat.user.content}</p>
+                        <p className="text-blue-500 mt-[4px]">{chat.user.content}</p>
                     ) : (
                         <ChatInput
                             onSubmit={handleUserInput}
@@ -31,7 +33,15 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
                 chat.user.content && (
                     <div className="flex gap-2 items-start">
                         <User name={'assistant'} />
-                        <p className="text-gray-500 mt-1">{chat.assistant.content || 'Processing...'}</p>
+                        {
+                            chat.assistant.content ? (
+                                <div className="markdown-body mt-[4px]">
+                                    <Markdown>{chat.assistant.content}</Markdown>
+                                </div>
+                            ) : (
+                                <Loading />
+                            )
+                        }
                     </div>
                 )
             }
@@ -49,26 +59,12 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
     );
 }
 
-function ChatInput({ onSubmit }) {
-    const [input, setInput] = useState('');
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        console.log('input', input);
-        onSubmit(input);
-        setInput('');
-    }
-
+function Loading() {
     return (
-        <form onSubmit={handleSubmit} className="flex gap-2 w-full items-center">
-            <input
-                type="text"
-                className="w-full border border-gray-300 rounded-md p-2"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Type your message here..."
-            />
-            <button type="submit" className="bg-blue-500 text-white rounded-md px-2 py-1">Send</button>
-        </form>
-    );
+        <div className="self-center flex gap-2 items-start">
+            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
+            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
+            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
+        </div>
+    )
 }
