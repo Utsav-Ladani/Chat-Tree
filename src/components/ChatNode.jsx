@@ -1,11 +1,12 @@
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import Chat from "./Chat";
-import React, { useRef, useEffect, useState } from "react";
 
-export default function ChatNode({ node, parentRef }) {
+export default function ChatNode({ node, parentRef, onAddChild, reRender }) {
     const ref = useRef(null);
     const [line, setLine] = useState(null);
 
-    useEffect(() => {
+    const handleNodeResize = useCallback(() => {
+
         if (!parentRef || !ref) {
             return;
         }
@@ -43,17 +44,21 @@ export default function ChatNode({ node, parentRef }) {
             midY,
         });
 
-    }, [node, parentRef]);
+    }, [parentRef]);
+
+    useEffect(() => {
+        handleNodeResize();
+    }, [reRender, handleNodeResize]);
 
     if (!node) return null;
 
     return (
         <div className="flex flex-col gap-y-6 w-fit items-start chat-node relative" >
-            <Chat chat={node} ref={ref} />
+            <Chat chat={node} ref={ref} onAddChild={onAddChild} />
             {node.children && (
                 <div className="flex gap-x-6">
                     {node.children.map((child) => (
-                        <ChatNode key={child.id} node={child} parentRef={ref} />
+                        <ChatNode key={child.id} node={child} parentRef={ref} onAddChild={onAddChild} reRender={reRender} />
                     ))}
                 </div>
             )}

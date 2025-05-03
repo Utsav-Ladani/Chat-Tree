@@ -1,12 +1,15 @@
 @import "tailwindcss";
 
 .chat:hover,
-.chat-node:has(.chat:hover) > .chat {
+.chat:focus,
+.chat-node:has(.chat:hover) > .chat,
+.chat-node:has(.chat:focus) > .chat {
   border-color: #000;
   background-color: #00000006;
 }
 
-.chat-node:has(.chat:hover) > .edge {
+.chat-node:has(.chat:hover) > .edge,
+.chat-node:has(.chat:focus) > .edge {
   color: #000;
   z-index: 1;
 }
