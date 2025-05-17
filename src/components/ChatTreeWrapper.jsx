@@ -11,7 +11,7 @@ export default function ChatTreeWrapper({ chatRootNodes, parentRef, onAddChild, 
     }, [chatRootNodes, id]);
 
     return (
-        <>
+        <div className="grid grid-rows-[auto_1fr] h-screen w-full">
             <ChatHeader title={currentChatRootNode?.title || 'Untitled'} />
             <ChatTree
                 chatRootNode={currentChatRootNode}
@@ -20,6 +20,6 @@ export default function ChatTreeWrapper({ chatRootNodes, parentRef, onAddChild, 
                 reRender={reRender}
                 updateNodeData={updateNodeData}
             />
-        </>
+        </div>
     );
 }

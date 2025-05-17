@@ -89,20 +89,19 @@ function App() {
           addRootNode();
         }}
       />
-      <div className="grid grid-rows-[auto_1fr] h-screen w-full">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <div className="flex flex-col items-center justify-center h-full">
-                <h2 className="text-2xl font-bold">Hello 👋</h2>
-                <p className="text-lg">Select a chat tree to get started</p>
-              </div>
-            } />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="flex flex-col items-center justify-center h-full">
+              <h2 className="text-2xl font-bold">Hello 👋</h2>
+              <p className="text-lg">Select a chat tree to get started</p>
+            </div>
+          } />
 
-          <Route
-            path="/chat/:id"
-            element={
+        <Route
+          path="/chat/:id"
+          element={
               <ChatTreeWrapper
                 chatRootNodes={chatRootNodes}
                 parentRef={parentRef}
@@ -110,9 +109,8 @@ function App() {
                 reRender={reRender}
                 updateNodeData={updateNodeData}
               />
-            } />
-        </Routes>
-      </div>
+          } />
+      </Routes>
     </div>
   )
 }
