@@ -2,7 +2,7 @@ import Markdown from 'react-markdown'
 
 import PlusIcon from "../icons/PlusIcon";
 import User from "./User";
-import { getLLMResponse } from "../LLM";
+import { getLLMResponse, generateTitleFromFirstConversation } from "../LLM";
 import ChatInput from "./ChatInput";
 import { saveConversation, getAllConversations } from "../db/conversation";
 import { buildMessageHistory } from "../utils/conversationHistory";
@@ -19,11 +19,13 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
         const messages = buildMessageHistory(chat, input, conversations);
 
         const response = await getLLMResponse(messages);
+        const title = chat.parentId === null ? await generateTitleFromFirstConversation(input, response) : null;
 
-        updateNodeData(chat.id, { assistant: response });
+        updateNodeData(chat.id, { assistant: response, ...(title && { title }) });
 
         const saved = await saveConversation({
             parentId: chat.parentId || null,
+            ...(title && { title }),
             user: input,
             assistant: response,
         });

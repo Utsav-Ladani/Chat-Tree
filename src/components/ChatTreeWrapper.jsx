@@ -12,7 +12,7 @@ export default function ChatTreeWrapper({ chatRootNodes, parentRef, onAddChild, 
 
     return (
         <>
-            <ChatHeader title={currentChatRootNode?.user || 'Chat Tree App'} />
+            <ChatHeader title={currentChatRootNode?.title || 'Untitled'} />
             <ChatTree
                 chatRootNode={currentChatRootNode}
                 parentRef={parentRef}

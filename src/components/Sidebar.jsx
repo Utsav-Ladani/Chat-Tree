@@ -26,7 +26,7 @@ export default function Sidebar({ chatRootNodes, onNewChat }) {
                                 }`
                             }
                         >
-                            {node.user || 'Untitled'}
+                            {node.title || 'Untitled'}
                         </NavLink>
                     </li>
                 ))}
