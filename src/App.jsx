@@ -6,6 +6,8 @@ import { getAllConversations } from './db/conversation';
 import { buildTree } from './utils/tree';
 import { useState } from 'react';
 import { useRef } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import ChatTreeWrapper from './components/ChatTreeWrapper';
 
 const DEFAULT_ROOT_NODE = [{
   id: 0,
@@ -15,11 +17,9 @@ const DEFAULT_ROOT_NODE = [{
 }];
 
 function App() {
-  const [chatRootNode, setChatRootNode] = useState(DEFAULT_ROOT_NODE);
+  const [chatRootNodes, setChatRootNodes] = useState(DEFAULT_ROOT_NODE);
   const parentRef = useRef(null);
   const [reRender, setReRender] = useState(0);
-
-  const currentChatRootNode = chatRootNode[0]
 
   function addChildNode(parentId) {
     function addChildRecursive(node) {
@@ -45,7 +45,7 @@ function App() {
         return node;
       }
     }
-    setChatRootNode((root) => addChildRecursive(root));
+    setChatRootNodes((root) => addChildRecursive(root));
     setReRender((prev) => prev + 1);
   }
 
@@ -64,31 +64,51 @@ function App() {
 
       return node;
     }
-    setChatRootNode((root) => updateNodeRecursive(root));
+    setChatRootNodes((root) => updateNodeRecursive(root));
     setReRender((prev) => prev + 1);
   }
 
   useEffect(() => {
     getAllConversations().then(records => {
-      setChatRootNode(buildTree(records) ?? DEFAULT_ROOT_NODE);
+      setChatRootNodes(buildTree(records) ?? DEFAULT_ROOT_NODE);
     });
   }, []);
 
   return (
     <div className="grid grid-cols-[auto_1fr] h-screen w-full">
-      <Sidebar chatRootNode={chatRootNode} />
+      <Sidebar
+        chatRootNodes={chatRootNodes}
+        onNewChat={() => {
+          addChildNode(0);
+        }}
+      />
       <div className="grid grid-rows-[auto_1fr] h-screen w-full">
         <header className="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-200">
           <h1 className="text-3xl font-bold">Chat Tree App</h1>
           <button className="bg-black text-white px-4 py-1 rounded">Settings</button>
         </header>
-        <ChatTree
-          chatRootNode={currentChatRootNode}
-          parentRef={parentRef}
-          onAddChild={addChildNode}
-          reRender={reRender}
-          updateNodeData={updateNodeData}
-        />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="flex flex-col items-center justify-center h-full">
+                <h2 className="text-2xl font-bold">Hello 👋</h2>
+                <p className="text-lg">Select a chat tree to get started</p>
+              </div>
+            } />
+
+          <Route
+            path="/chat/:id"
+            element={
+              <ChatTreeWrapper
+                chatRootNodes={chatRootNodes}
+                parentRef={parentRef}
+                onAddChild={addChildNode}
+                reRender={reRender}
+                updateNodeData={updateNodeData}
+              />
+            } />
+        </Routes>
       </div>
     </div>
   )
