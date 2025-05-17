@@ -72,7 +72,7 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
                         className="self-end text-white bg-blue-500 rounded-full p-1 hover:text-blue-600 hover:bg-white border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-blue-500"
                         onClick={() => onAddChild && onAddChild(chat.id)}
                     >
-                        <PlusIcon />
+                        <PlusIcon className="size-6" />
                     </button>
                 )
             }

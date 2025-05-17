@@ -19,5 +19,6 @@ export function buildTree(records) {
         }
     });
 
-    return roots; // Array of root nodes (forest), or roots[0] if you only have one root
+    // remove orphan nodes
+    return roots.filter(root => root.parentId === null);
 }
