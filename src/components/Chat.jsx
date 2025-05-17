@@ -6,19 +6,17 @@ import { getLLMResponse } from "../LLM";
 import ChatInput from "./ChatInput";
 import { saveConversation, getAllConversations } from "../db/conversation";
 import { buildMessageHistory } from "../utils/conversationHistory";
+import { useNavigate } from 'react-router-dom';
 
 export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
+    const navigate = useNavigate();
 
     async function handleUserInput(input) {
         updateNodeData(chat.id, { user: input });
 
         // Fetch all conversations to reconstruct the parent chain
-        const allConversations = await getAllConversations();
-        console.log(allConversations);
-        window.allConversationsX = allConversations;
-        const messages = buildMessageHistory(chat, input, allConversations);
-
-        console.log(messages);
+        const conversations = await getAllConversations();
+        const messages = buildMessageHistory(chat, input, conversations);
 
         const response = await getLLMResponse(messages);
 
@@ -33,6 +31,12 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
         // Sync the id from IndexedDB
         if (saved.id !== chat.id) {
             updateNodeData(chat.id, { id: saved.id });
+        }
+
+        console.log(chat.parentId, saved.id, chat.parentId === null);
+
+        if (chat.parentId === null) {
+            navigate(`/chat/${saved.id}`);
         }
     }
 

@@ -1,30 +1,37 @@
 import { useEffect } from 'react';
 import './App.css'
-import ChatTree from './components/ChatTree'
 import Sidebar from './components/Sidebar'
 import { getAllConversations } from './db/conversation';
 import { buildTree } from './utils/tree';
 import { useState } from 'react';
 import { useRef } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import ChatTreeWrapper from './components/ChatTreeWrapper';
 
-const DEFAULT_ROOT_NODE = [{
-  id: 0,
-  user: '',
-  assistant: '',
-  children: [],
-}];
-
 function App() {
-  const [chatRootNodes, setChatRootNodes] = useState(DEFAULT_ROOT_NODE);
+  const [chatRootNodes, setChatRootNodes] = useState([]);
   const parentRef = useRef(null);
   const [reRender, setReRender] = useState(0);
+  const navigate = useNavigate();
+
+  function addRootNode() {
+    const newRootNode = {
+      parentId: null,
+      id: Date.now(),
+      user: '',
+      assistant: '',
+      children: [],
+    };
+
+    setChatRootNodes((rootNode) => [newRootNode, ...rootNode]);
+    setReRender((prev) => prev + 1);
+    navigate(`/chat/${newRootNode.id}`);
+  }
 
   function addChildNode(parentId) {
     function addChildRecursive(node) {
       if (node.id === parentId) {
-        const tempId = -Date.now();
+        const tempId = Date.now();
         const newChild = {
           id: tempId,
           parentId: parentId,
@@ -45,7 +52,7 @@ function App() {
         return node;
       }
     }
-    setChatRootNodes((root) => addChildRecursive(root));
+    setChatRootNodes((rootNodes) => rootNodes.map(addChildRecursive));
     setReRender((prev) => prev + 1);
   }
 
@@ -64,13 +71,13 @@ function App() {
 
       return node;
     }
-    setChatRootNodes((root) => updateNodeRecursive(root));
+    setChatRootNodes((rootNodes) => rootNodes.map(updateNodeRecursive));
     setReRender((prev) => prev + 1);
   }
 
   useEffect(() => {
     getAllConversations().then(records => {
-      setChatRootNodes(buildTree(records) ?? DEFAULT_ROOT_NODE);
+      setChatRootNodes(buildTree(records) ?? []);
     });
   }, []);
 
@@ -79,14 +86,10 @@ function App() {
       <Sidebar
         chatRootNodes={chatRootNodes}
         onNewChat={() => {
-          addChildNode(0);
+          addRootNode();
         }}
       />
       <div className="grid grid-rows-[auto_1fr] h-screen w-full">
-        <header className="flex justify-between items-center p-4 bg-gray-100 border-b border-gray-200">
-          <h1 className="text-3xl font-bold">Chat Tree App</h1>
-          <button className="bg-black text-white px-4 py-1 rounded">Settings</button>
-        </header>
         <Routes>
           <Route
             path="/"

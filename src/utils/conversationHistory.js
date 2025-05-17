@@ -1,9 +1,9 @@
 // Utility to build the message history for LLM context
-export function buildMessageHistory(chat,userInput, allConversations) {
+export function buildMessageHistory(chat,userInput, conversations) {
     // Build a map for quick lookup
     const idToConversation = {};
 
-    allConversations.forEach(conv => { idToConversation[conv.id] = conv; });
+    conversations.forEach(conv => { idToConversation[conv.id] = conv; });
 
     // Traverse from current chat up to root, collecting messages
     let current = { ...chat, user: userInput }; // include the new user input
