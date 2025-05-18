@@ -1,15 +1,14 @@
 import Markdown from 'react-markdown'
-import { Trash2 } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 
-import PlusIcon from "../icons/PlusIcon";
-import User from "./User";
+import UserAvatar from "./UserAvatar";
 import { getLLMResponse, generateTitleFromFirstConversation } from "../LLM";
 import ChatInput from "./ChatInput";
 import { saveConversation, getAllConversations } from "../db/conversation";
 import { buildMessageHistory } from "../utils/conversationHistory";
 import { useNavigate } from 'react-router-dom';
 
-export default function Chat({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot }) {
+function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot }) {
     const navigate = useNavigate();
 
     async function handleUserInput(input) {
@@ -46,7 +45,7 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData, onDeleteNo
     return (
         <div className="chat flex flex-col gap-3 border border-gray-300 rounded-md p-3 min-w-[400px] max-w-[700px]" ref={ref} tabIndex={0}>
             <div className="flex gap-2 items-start">
-                <User name={'user'} />
+                <UserAvatar name={'user'} />
                 {
                     chat.user ? (
                         <p className="text-blue-500 mt-[4px] w-full">{chat.user}</p>
@@ -71,14 +70,14 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData, onDeleteNo
             {
                 chat.user && (
                     <div className="flex gap-2 items-start">
-                        <User name={'assistant'} />
+                        <UserAvatar name={'assistant'} />
                         {
                             chat.assistant ? (
                                 <div className="markdown-body mt-[4px]">
                                     <Markdown>{chat.assistant}</Markdown>
                                 </div>
                             ) : (
-                                <Loading />
+                                <ChatCardLoading />
                             )
                         }
                     </div>
@@ -90,7 +89,7 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData, onDeleteNo
                         className="self-end text-white bg-blue-500 rounded-full p-1 hover:text-blue-600 hover:bg-white border border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-blue-500"
                         onClick={() => onAddChild && onAddChild(chat.id)}
                     >
-                        <PlusIcon className="size-6" />
+                        <Plus className="size-6" />
                     </button>
                 )
             }
@@ -98,7 +97,7 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData, onDeleteNo
     );
 }
 
-function Loading() {
+function ChatCardLoading() {
     return (
         <div className="self-center flex gap-2 items-start">
             <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
@@ -107,3 +106,5 @@ function Loading() {
         </div>
     )
 }
+
+export default ChatCard;

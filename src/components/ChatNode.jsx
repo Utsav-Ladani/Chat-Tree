@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import Chat from "./Chat";
+import ChatCard from "./ChatCard";
+import ChatNodeEdge from "./ChatNodeEdge";
 
 export default function ChatNode({ node, parentRef, onAddChild, reRender, updateNodeData, zoom, translate, onDeleteNode }) {
     const ref = useRef(null);
@@ -52,7 +53,7 @@ export default function ChatNode({ node, parentRef, onAddChild, reRender, update
 
     return (
         <div className="flex flex-col gap-y-6 w-fit items-start chat-node relative">
-            <Chat
+            <ChatCard
                 chat={node}
                 ref={ref}
                 onAddChild={onAddChild}
@@ -91,16 +92,5 @@ export default function ChatNode({ node, parentRef, onAddChild, reRender, update
                 </svg>
             )}
         </div>
-    );
-}
-
-function ChatNodeEdge({ line }) {
-    return (
-        <path
-            d={`M ${line.x1} ${line.y1} V ${line.midY} H ${line.x2} V ${line.y2}`}
-            stroke="currentColor"
-            strokeWidth={1}
-            fill="none"
-        />
     );
 }

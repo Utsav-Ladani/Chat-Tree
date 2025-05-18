@@ -5,7 +5,6 @@ export default function ChatInput({ onSubmit }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        console.log('input', input);
         onSubmit(input);
         setInput('');
     }

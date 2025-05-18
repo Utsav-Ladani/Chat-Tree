@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
-export default function useZoomPan(chatRootNode) {
+export default function useZoomPan(chatId) {
     const [zoom, setZoom] = useState(1);
     const [translate, setTranslate] = useState({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState(false);
@@ -11,7 +11,7 @@ export default function useZoomPan(chatRootNode) {
     useEffect(() => {
         setZoom(1);
         setTranslate({ x: 0, y: 0 });
-    }, [chatRootNode]);
+    }, [chatId]);
 
     const isZoomOutDisabled = zoom <= 0.4;
     const isZoomInDisabled = zoom >= 1.5;
@@ -21,8 +21,6 @@ export default function useZoomPan(chatRootNode) {
     const handleZoomOut = useCallback(() => setZoom(z => Math.max(z - 0.1, 0.4)), []);
 
     const handleWheel = useCallback((e) => {
-        e.preventDefault();
-
         if (e.metaKey || e.ctrlKey) {
             window.requestAnimationFrame(() => {
                 if (e.deltaY < 0) {

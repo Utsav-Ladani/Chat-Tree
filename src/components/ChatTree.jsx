@@ -18,7 +18,7 @@ export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender
         isZoomInDisabled,
         isZoomOutDisabled,
         resetZoomPan,
-    } = useZoomPan(chatRootNode);
+    } = useZoomPan(chatRootNode?.id);
 
     if (!chatRootNode) return null;
 
