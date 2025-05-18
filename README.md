@@ -4,14 +4,12 @@ A minimal web app to create, explore, and branch chat conversations as a tree.
 
 # Demo
 
-https://github.com/user-attachments/assets/df1a1b39-8a94-4855-9560-542b30051380
+https://github.com/user-attachments/assets/6c4cbb04-09a2-42ec-b9fa-e5d7b79223f2
 
 ## Getting Started
 
 ```bash
 pnpm install
-pnpm run dev
+pnpm install -g vercel
+vercel dev
 ```
-
-## Notes
-- Requires an LLM backend running at `http://localhost:12434` (see `vite.config.js` for proxy setup).
