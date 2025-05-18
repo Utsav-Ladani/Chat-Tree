@@ -1,11 +1,32 @@
 import OpenAI from 'openai';
 import { AI_MODEL_OPTIONS } from '../utils/constants';
 
-function getLLM() {
-    const apiKey = localStorage.getItem('api-key') || '';
+export function getModelFromLocalStorage() {
+    const modelIdentifier = localStorage.getItem('llm:model-identifier') || AI_MODEL_OPTIONS[0].modelIdentifier;
 
-    const modelIdentifier = localStorage.getItem('model-identifier') || AI_MODEL_OPTIONS[0].modelIdentifier;
-    const model = AI_MODEL_OPTIONS.find(m => m.modelIdentifier === modelIdentifier);
+    return AI_MODEL_OPTIONS.find(m => m.modelIdentifier === modelIdentifier);
+}
+
+export function setModelToLocalStorage(modelIdentifier) {
+    localStorage.setItem('llm:model-identifier', modelIdentifier);
+}
+
+export function getApiKeyFromLocalStorage(modelIdentifier) {
+    return localStorage.getItem(`llm:${modelIdentifier}:api-key`) || '';
+}
+
+export function setApiKeyToLocalStorage(modelIdentifier, apiKey) {
+    localStorage.setItem(`llm:${modelIdentifier}:api-key`, apiKey);
+}
+
+export async function getLLMResponse(messages) {
+    const model = getModelFromLocalStorage();
+
+    if (!model) {
+        throw new Error('Model not found');
+    }
+
+    const apiKey = getApiKeyFromLocalStorage(model.modelIdentifier);
 
     const client = new OpenAI({
         baseURL: model.apiBaseUrl,
@@ -13,17 +34,8 @@ function getLLM() {
         dangerouslyAllowBrowser: true,
     });
 
-    return {
-        client,
-        model,
-    }
-}
-
-export async function getLLMResponse(messages) {
-    const { client, model } = getLLM()
-
     const response = await client.chat.completions.create({
-        model: model.modelIdentifier,
+        model: model.modelName,
         messages,
     });
 

@@ -1,18 +1,42 @@
 import { X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AI_MODEL_OPTIONS } from "../utils/constants";
+import { getApiKeyFromLocalStorage, getModelFromLocalStorage, setApiKeyToLocalStorage, setModelToLocalStorage } from "../LLM";
 
 export default function SettingsModal({ isOpen, onClose }) {
-    const [modelIdentifier, setModelIdentifier] = useState(() => localStorage.getItem('model-identifier') || AI_MODEL_OPTIONS[0].modelIdentifier);
-    const [apiKey, setApiKey] = useState(() => localStorage.getItem('api-key') || '');
+    const [modelIdentifier, setModelIdentifier] = useState('');
+    const [apiKey, setApiKey] = useState('');
+
+    useEffect(() => {
+        const model = getModelFromLocalStorage();
+
+        if (!model) return;
+
+        setModelIdentifier(model.modelIdentifier);
+        setApiKey(getApiKeyFromLocalStorage(model.modelIdentifier));
+    }, [isOpen]);
 
     if (!isOpen) return null;
+
+    function handleModelChange(e) {
+        const modelIdentifier = e.target.value;
+        const model = AI_MODEL_OPTIONS.find(m => m.modelIdentifier === modelIdentifier);
+
+        if (!model) return;
+
+        setModelIdentifier(modelIdentifier);
+        setApiKey(getApiKeyFromLocalStorage(modelIdentifier));
+    }
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        localStorage.setItem('model-identifier', modelIdentifier);
-        localStorage.setItem('api-key', apiKey);
+        const model = AI_MODEL_OPTIONS.find(m => m.modelIdentifier === modelIdentifier);
+
+        if (!model) return;
+
+        setModelToLocalStorage(modelIdentifier);
+        setApiKeyToLocalStorage(modelIdentifier, apiKey);
 
         onClose();
     }
@@ -27,11 +51,11 @@ export default function SettingsModal({ isOpen, onClose }) {
                         id="model-select"
                         className="border border-gray-300 rounded px-2 py-1"
                         value={modelIdentifier}
-                        onChange={(e) => setModelIdentifier(e.target.value)}
+                        onChange={handleModelChange}
                     >
                         {AI_MODEL_OPTIONS.map((option) => (
-                            <option key={option.optionKey} value={option.modelIdentifier}>
-                                {option.provider} - {option.modelName}
+                            <option key={option.modelIdentifier} value={option.modelIdentifier}>
+                                {option.provider} - {option.modelLabel}
                             </option>
                         ))}
                     </select>
