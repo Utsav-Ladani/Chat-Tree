@@ -122,6 +122,11 @@ export default function useZoomPan(chatRootNode) {
         }
     }, []);
 
+    const resetZoomPan = useCallback(() => {
+        setZoom(1);
+        setTranslate({ x: 0, y: 0 });
+    }, []);
+
     // Attach/detach mousemove/mouseup listeners
     useEffect(() => {
         return () => {
@@ -143,5 +148,6 @@ export default function useZoomPan(chatRootNode) {
         handleZoomOut,
         isZoomInDisabled,
         isZoomOutDisabled,
+        resetZoomPan,
     };
 } 

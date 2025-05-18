@@ -17,6 +17,7 @@ export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender
         handleZoomOut,
         isZoomInDisabled,
         isZoomOutDisabled,
+        resetZoomPan,
     } = useZoomPan(chatRootNode);
 
     if (!chatRootNode) return null;
@@ -37,6 +38,7 @@ export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender
                 onZoomOut={handleZoomOut}
                 isZoomInDisabled={isZoomInDisabled}
                 isZoomOutDisabled={isZoomOutDisabled}
+                onReset={resetZoomPan}
             />
             <div
                 className="origin-center"
