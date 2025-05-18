@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AI_MODEL_OPTIONS } from "../utils/constants";
 
 export default function SettingsModal({ isOpen, onClose }) {
-    const [modelName, setModelName] = useState(() => localStorage.getItem('model-name') || AI_MODEL_OPTIONS[0].modelIdentifier);
+    const [modelIdentifier, setModelIdentifier] = useState(() => localStorage.getItem('model-identifier') || AI_MODEL_OPTIONS[0].modelIdentifier);
     const [apiKey, setApiKey] = useState(() => localStorage.getItem('api-key') || '');
 
     if (!isOpen) return null;
@@ -11,7 +11,7 @@ export default function SettingsModal({ isOpen, onClose }) {
     function handleSubmit(e) {
         e.preventDefault();
 
-        localStorage.setItem('model-name', modelName);
+        localStorage.setItem('model-identifier', modelIdentifier);
         localStorage.setItem('api-key', apiKey);
 
         onClose();
@@ -26,8 +26,8 @@ export default function SettingsModal({ isOpen, onClose }) {
                     <select
                         id="model-select"
                         className="border border-gray-300 rounded px-2 py-1"
-                        value={modelName}
-                        onChange={(e) => setModelName(e.target.value)}
+                        value={modelIdentifier}
+                        onChange={(e) => setModelIdentifier(e.target.value)}
                     >
                         {AI_MODEL_OPTIONS.map((option) => (
                             <option key={option.optionKey} value={option.modelIdentifier}>

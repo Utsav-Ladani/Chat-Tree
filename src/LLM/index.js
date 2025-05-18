@@ -1,16 +1,14 @@
 import OpenAI from 'openai';
 import { AI_MODEL_OPTIONS } from '../utils/constants';
 
-const HOST = window.location.origin;
-
 function getLLM() {
     const apiKey = localStorage.getItem('api-key') || '';
 
-    const modelIdentifier = localStorage.getItem('model-name') || AI_MODEL_OPTIONS[0].modelIdentifier;
+    const modelIdentifier = localStorage.getItem('model-identifier') || AI_MODEL_OPTIONS[0].modelIdentifier;
     const model = AI_MODEL_OPTIONS.find(m => m.modelIdentifier === modelIdentifier);
 
     const client = new OpenAI({
-        baseURL: model.supportsCORS ? `${HOST}/api/llm/${model.optionKey}` : model.apiBaseUrl,
+        baseURL: model.apiBaseUrl,
         apiKey,
         dangerouslyAllowBrowser: true,
     });

@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/api/llm/docker-gemma3/:path*",
-      "destination": "http://localhost:12434/engines/v1/:path*"
-    }
-  ]
-}
