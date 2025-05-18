@@ -1,7 +1,9 @@
 import OpenAI from 'openai';
 
+const HOST = window.location.origin;
+
 const client = new OpenAI({
-    baseURL: 'http://localhost:5173/engines/v1',
+    baseURL: `${HOST}/api/llm`,
     apiKey: '',
     dangerouslyAllowBrowser: true,
 });

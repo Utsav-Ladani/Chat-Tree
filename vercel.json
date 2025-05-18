@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/llm/:path*",
+      "destination": "http://localhost:12434/engines/v1/:path*"
+    }
+  ]
+}
