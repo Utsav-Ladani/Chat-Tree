@@ -2,15 +2,21 @@ import OpenAI from 'openai';
 
 const HOST = window.location.origin;
 
-const client = new OpenAI({
-    baseURL: `${HOST}/api/llm`,
-    apiKey: '',
-    dangerouslyAllowBrowser: true,
-});
+function getLLMClient() {
+    const apiKey = localStorage.getItem('api-key') || '';
+
+    return new OpenAI({
+        baseURL: `${HOST}/api/llm`,
+        apiKey,
+        dangerouslyAllowBrowser: true,
+    });
+}
 
 export async function getLLMResponse(messages) {
-    const response = await client.chat.completions.create({
-        model: 'ai/gemma3:latest',
+    const modelName = localStorage.getItem('model-name');
+
+    const response = await getLLMClient().chat.completions.create({
+        model: modelName,
         messages,
     });
 

@@ -1,10 +1,14 @@
 import { Link, NavLink } from "react-router-dom";
 import { Trash2, Plus } from "lucide-react";
 import { Settings } from "lucide-react";
+import { useState } from "react";
+import SettingsModal from "./SettingsModal";
 
 export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
     return (
-        <aside className="flex flex-col bg-gray-100 py-2 w-64 border-r border-gray-200 h-screen">
+        <aside className="flex flex-col bg-gray-100 py-2 w-72 border-r border-gray-200 h-screen">
             <header className="flex justify-between items-center mb-4 px-4 py-2">
                 <Link to="/">
                     <h2 className="text-2xl font-bold">Chat Trees 🌳</h2>
@@ -47,12 +51,16 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                 className="mx-2 mt-2 block flex items-center w-fit bg-black text-white px-2 py-1 rounded border border-gray-600 hover:bg-gray-200 hover:text-black"
                 title="Settings"
                 onClick={() => {
-                    console.log('Settings');
+                    setIsSettingsOpen(true);
                 }}
             >
                 <Settings size={18} />
                 <span className="ml-2">Settings</span>
             </button>
+            <SettingsModal
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+            />
         </aside>
     )
 }

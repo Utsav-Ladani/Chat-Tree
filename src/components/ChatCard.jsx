@@ -12,33 +12,38 @@ function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot 
     const navigate = useNavigate();
 
     async function handleUserInput(input) {
-        updateNodeData(chat.id, { user: input });
+        try {
+            updateNodeData(chat.id, { user: input });
 
-        // Fetch all conversations to reconstruct the parent chain
-        const conversations = await getAllConversations();
-        const messages = buildMessageHistory(chat, input, conversations);
+            // Fetch all conversations to reconstruct the parent chain
+            const conversations = await getAllConversations();
+            const messages = buildMessageHistory(chat, input, conversations);
 
-        const response = await getLLMResponse(messages);
-        const title = chat.parentId === null ? await generateTitleFromFirstConversation(input, response) : null;
+            const response = await getLLMResponse(messages);
+            const title = chat.parentId === null ? await generateTitleFromFirstConversation(input, response) : null;
 
-        updateNodeData(chat.id, { assistant: response, ...(title && { title }) });
+            updateNodeData(chat.id, { assistant: response, ...(title && { title }) });
 
-        const saved = await saveConversation({
-            parentId: chat.parentId || null,
-            ...(title && { title }),
-            user: input,
-            assistant: response,
-        });
+            const saved = await saveConversation({
+                parentId: chat.parentId || null,
+                ...(title && { title }),
+                user: input,
+                assistant: response,
+            });
 
-        // Sync the id from IndexedDB
-        if (saved.id !== chat.id) {
-            updateNodeData(chat.id, { id: saved.id });
-        }
+            // Sync the id from IndexedDB
+            if (saved.id !== chat.id) {
+                updateNodeData(chat.id, { id: saved.id });
+            }
 
-        console.log(chat.parentId, saved.id, chat.parentId === null);
+            console.log(chat.parentId, saved.id, chat.parentId === null);
 
-        if (chat.parentId === null) {
-            navigate(`/chat/${saved.id}`);
+            if (chat.parentId === null) {
+                navigate(`/chat/${saved.id}`);
+            }
+        } catch (error) {
+            console.error(error)
+            updateNodeData(chat.id, { assistant: 'Error while generating response',});  
         }
     }
 
