@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+body {
+  overscroll-behavior: none;
+}
+
 .chat:hover,
 .chat:focus,
 .chat-node:has(.chat:hover)>.chat,
