@@ -29,9 +29,9 @@ export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender
     const handleWheel = (e) => {
         window.requestAnimationFrame(() => {
             if (e.deltaY < 0) {
-                setZoom(z => Math.min(z + 0.05, 1));
+                setZoom(z => Math.min(z * 1.03, 1));
             } else if (e.deltaY > 0) {
-                setZoom(z => Math.max(z - 0.05, 0.4));
+                setZoom(z => Math.max(z * 0.97, 0.4));
             }
         });
     };
