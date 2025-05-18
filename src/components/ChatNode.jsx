@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import Chat from "./Chat";
 
-export default function ChatNode({ node, parentRef, onAddChild, reRender, updateNodeData, zoom }) {
+export default function ChatNode({ node, parentRef, onAddChild, reRender, updateNodeData, zoom, translate }) {
     const ref = useRef(null);
     const [line, setLine] = useState(null);
 
@@ -46,7 +46,7 @@ export default function ChatNode({ node, parentRef, onAddChild, reRender, update
 
     useEffect(() => {
         handleNodeResize();
-    }, [reRender, handleNodeResize, zoom]);
+    }, [reRender, handleNodeResize, zoom, translate]);
 
     if (!node) return null;
 
@@ -69,6 +69,7 @@ export default function ChatNode({ node, parentRef, onAddChild, reRender, update
                             reRender={reRender}
                             updateNodeData={updateNodeData}
                             zoom={zoom}
+                            translate={translate}
                         />
                     ))}
                 </div>
