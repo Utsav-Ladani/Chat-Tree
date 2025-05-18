@@ -23,18 +23,31 @@ export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender
         }
     };
 
+    const isZoomOutDisabled = zoom <= 0.4;
+    const isZoomInDisabled = zoom >= 1;
+
     return (
         <main
             className="p-4 overflow-hidden relative"
             onWheel={handleWheel}
         >
-            <div className="absolute bottom-4 right-4 z-1 flex items-center gap-2 bg-gray-100 border border-gray-400 rounded-md shadow-xl p-2">
-                <button onClick={handleZoomIn} className="p-2 bg-black text-white border rounded hover:bg-gray-300 hover:text-black hover:border-gray-400">
-                    <ZoomIn size={16} />
-                </button>
-                <span className="w-10 text-sm text-center">{Math.round(zoom * 100)}%</span>
-                <button onClick={handleZoomOut} className="p-2 bg-black text-white border rounded hover:bg-gray-300 hover:text-black hover:border-gray-400">
+            <div className="absolute bottom-4 right-4 z-1 flex items-center gap-3 bg-black border border-gray-800 rounded-full shadow-2xl">
+                <button
+                    onClick={handleZoomOut}
+                    className={`p-2 bg-white text-black border border-black rounded-full disabled:opacity-70 disabled:cursor-not-allowed ${!isZoomOutDisabled ? 'hover:bg-gray-200' : ''}`}
+                    disabled={isZoomOutDisabled}
+                >
                     <ZoomOut size={16} />
+                </button>
+                <span className="w-9 text-sm text-center font-medium text-white select-none">
+                    {Math.round(zoom * 100)}%
+                </span>
+                <button
+                    onClick={handleZoomIn}
+                    className={`p-2 bg-white text-black border border-black rounded-full disabled:opacity-70 disabled:cursor-not-allowed ${!isZoomInDisabled ? 'hover:bg-gray-200' : ''}`}
+                    disabled={isZoomInDisabled}
+                >
+                    <ZoomIn size={16} />
                 </button>
             </div>
             <div
