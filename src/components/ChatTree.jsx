@@ -1,6 +1,6 @@
 import ChatNode from "./ChatNode";
 import ChatTreeControls from "./ChatTreeControls";
-import useZoomPan from "./useZoomPan";
+import useZoomPan from "../hooks/useZoomPan";
 import React from "react";
 
 export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender, updateNodeData, onDeleteNode }) {

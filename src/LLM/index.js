@@ -1,22 +1,31 @@
 import OpenAI from 'openai';
+import { AI_MODEL_OPTIONS } from '../utils/constants';
 
 const HOST = window.location.origin;
 
-function getLLMClient() {
+function getLLM() {
     const apiKey = localStorage.getItem('api-key') || '';
 
-    return new OpenAI({
-        baseURL: `${HOST}/api/llm`,
+    const modelIdentifier = localStorage.getItem('model-name') || AI_MODEL_OPTIONS[0].modelIdentifier;
+    const model = AI_MODEL_OPTIONS.find(m => m.modelIdentifier === modelIdentifier);
+
+    const client = new OpenAI({
+        baseURL: model.supportsCORS ? `${HOST}/api/llm/${model.optionKey}` : model.apiBaseUrl,
         apiKey,
         dangerouslyAllowBrowser: true,
     });
+
+    return {
+        client,
+        model,
+    }
 }
 
 export async function getLLMResponse(messages) {
-    const modelName = localStorage.getItem('model-name');
+    const { client, model } = getLLM()
 
-    const response = await getLLMClient().chat.completions.create({
-        model: modelName,
+    const response = await client.chat.completions.create({
+        model: model.modelIdentifier,
         messages,
     });
 

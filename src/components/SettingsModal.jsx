@@ -1,23 +1,9 @@
 import { X } from "lucide-react";
 import { useState } from "react";
-
-const MODEL_SELECT_OPTIONS = [
-    {
-        platform: 'Docker',
-        model: 'Gemma 3',
-        value: 'ai/gemma3:latest'
-    },
-    {
-        platform: 'OpenAI',
-        model: 'GPT-4o-mini',
-        value: 'gpt-4o-mini'
-    }
-]
-
-const DEFAULT_MODEL_SELECT_OPTION = MODEL_SELECT_OPTIONS[0].value;
+import { AI_MODEL_OPTIONS } from "../utils/constants";
 
 export default function SettingsModal({ isOpen, onClose }) {
-    const [modelName, setModelName] = useState(() => localStorage.getItem('model-name') || DEFAULT_MODEL_SELECT_OPTION);
+    const [modelName, setModelName] = useState(() => localStorage.getItem('model-name') || AI_MODEL_OPTIONS[0].modelIdentifier);
     const [apiKey, setApiKey] = useState(() => localStorage.getItem('api-key') || '');
 
     if (!isOpen) return null;
@@ -43,9 +29,9 @@ export default function SettingsModal({ isOpen, onClose }) {
                         value={modelName}
                         onChange={(e) => setModelName(e.target.value)}
                     >
-                        {MODEL_SELECT_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.platform} - {option.model}
+                        {AI_MODEL_OPTIONS.map((option) => (
+                            <option key={option.optionKey} value={option.modelIdentifier}>
+                                {option.provider} - {option.modelName}
                             </option>
                         ))}
                     </select>
