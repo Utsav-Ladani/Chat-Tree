@@ -1,4 +1,5 @@
 import Markdown from 'react-markdown'
+import { Trash2 } from "lucide-react";
 
 import PlusIcon from "../icons/PlusIcon";
 import User from "./User";
@@ -8,7 +9,7 @@ import { saveConversation, getAllConversations } from "../db/conversation";
 import { buildMessageHistory } from "../utils/conversationHistory";
 import { useNavigate } from 'react-router-dom';
 
-export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
+export default function Chat({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot }) {
     const navigate = useNavigate();
 
     async function handleUserInput(input) {
@@ -48,11 +49,22 @@ export default function Chat({ chat, ref, onAddChild, updateNodeData }) {
                 <User name={'user'} />
                 {
                     chat.user ? (
-                        <p className="text-blue-500 mt-[4px]">{chat.user}</p>
+                        <p className="text-blue-500 mt-[4px] w-full">{chat.user}</p>
                     ) : (
                         <ChatInput
                             onSubmit={handleUserInput}
                         />
+                    )
+                }
+                {
+                    !isRoot && chat.user && chat.assistant && (
+                        <button
+                            className="text-red-500 hover:bg-red-100 rounded-full p-1 border border-red-200"
+                            title="Delete node"
+                            onClick={() => onDeleteNode(chat.id)}
+                        >
+                            <Trash2 size={18} />
+                        </button>
                     )
                 }
             </div>

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import Chat from "./Chat";
 
-export default function ChatNode({ node, parentRef, onAddChild, reRender, updateNodeData, zoom, translate }) {
+export default function ChatNode({ node, parentRef, onAddChild, reRender, updateNodeData, zoom, translate, onDeleteNode }) {
     const ref = useRef(null);
     const [line, setLine] = useState(null);
 
@@ -57,6 +57,8 @@ export default function ChatNode({ node, parentRef, onAddChild, reRender, update
                 ref={ref}
                 onAddChild={onAddChild}
                 updateNodeData={updateNodeData}
+                onDeleteNode={onDeleteNode}
+                isRoot={node.parentId == null}
             />
             {node.children && (
                 <div className="flex gap-x-6">
@@ -70,6 +72,7 @@ export default function ChatNode({ node, parentRef, onAddChild, reRender, update
                             updateNodeData={updateNodeData}
                             zoom={zoom}
                             translate={translate}
+                            onDeleteNode={onDeleteNode}
                         />
                     ))}
                 </div>

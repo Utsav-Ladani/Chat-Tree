@@ -3,7 +3,7 @@ import ChatNode from "./ChatNode";
 import React, { useState, useRef, useEffect } from "react";
 import { ZoomIn } from "lucide-react";
 
-export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender, updateNodeData }) {
+export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender, updateNodeData, onDeleteNode }) {
     const [zoom, setZoom] = useState(1);
 
     const [translate, setTranslate] = useState({ x: 0, y: 0 });
@@ -112,6 +112,7 @@ export default function ChatTree({ chatRootNode, parentRef, onAddChild, reRender
                     updateNodeData={updateNodeData}
                     zoom={zoom}
                     translate={translate}
+                    onDeleteNode={onDeleteNode}
                 />
             </div>
         </main>

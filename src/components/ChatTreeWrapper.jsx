@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import ChatTree from "./ChatTree";
 import ChatHeader from "./ChatHeader";
 
-export default function ChatTreeWrapper({ chatRootNodes, parentRef, onAddChild, reRender, updateNodeData }) {
+export default function ChatTreeWrapper({ chatRootNodes, parentRef, onAddChild, reRender, updateNodeData, onDeleteNode }) {
     const { id } = useParams();
 
     const currentChatRootNode = useMemo(() => {
@@ -19,6 +19,7 @@ export default function ChatTreeWrapper({ chatRootNodes, parentRef, onAddChild, 
                 onAddChild={onAddChild}
                 reRender={reRender}
                 updateNodeData={updateNodeData}
+                onDeleteNode={onDeleteNode}
             />
         </div>
     );

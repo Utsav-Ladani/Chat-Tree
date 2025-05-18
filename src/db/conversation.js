@@ -23,3 +23,8 @@ export async function getAllConversations() {
     const db = await getDB();
     return db.getAll(STORE_NAME);
 }
+
+export async function deleteConversation(id) {
+    const db = await getDB();
+    return db.delete(STORE_NAME, id);
+}

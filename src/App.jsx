@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import './App.css'
 import Sidebar from './components/Sidebar'
-import { getAllConversations } from './db/conversation';
-import { buildTree } from './utils/tree';
+import { getAllConversations, deleteConversation } from './db/conversation';
+import { buildTree, deleteNodeFromTree } from './utils/tree';
 import { useState } from 'react';
 import { useRef } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
@@ -75,6 +75,40 @@ function App() {
     setReRender((prev) => prev + 1);
   }
 
+  function deleteNode(nodeId) {
+    async function deleteNodeRecursive(node) {
+      // Delete this node from DB
+      await deleteConversation(node.id);
+      // Recursively delete children
+      if (node.children && node.children.length > 0) {
+        for (const child of node.children) {
+          await deleteNodeRecursive(child);
+        }
+      }
+    }
+
+    // Find the node to delete (and its children)
+    const findNode = (nodes) => {
+      for (const node of nodes) {
+        if (node.id === nodeId) return node;
+        if (node.children) {
+          const found = findNode(node.children);
+          if (found) return found;
+        }
+      }
+      return null;
+    };
+
+    const nodeToDelete = findNode(chatRootNodes);
+
+    if (nodeToDelete) {
+      deleteNodeRecursive(nodeToDelete).then(() => {
+        setChatRootNodes((rootNodes) => deleteNodeFromTree(rootNodes, nodeId));
+        setReRender((prev) => prev + 1);
+      });
+    }
+  }
+
   useEffect(() => {
     getAllConversations().then(records => {
       setChatRootNodes(buildTree(records) ?? []);
@@ -108,6 +142,7 @@ function App() {
                 onAddChild={addChildNode}
                 reRender={reRender}
                 updateNodeData={updateNodeData}
+                onDeleteNode={deleteNode}
               />
           } />
       </Routes>
