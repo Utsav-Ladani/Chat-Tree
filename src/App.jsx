@@ -105,6 +105,7 @@ function App() {
       deleteNodeRecursive(nodeToDelete).then(() => {
         setChatRootNodes((rootNodes) => deleteNodeFromTree(rootNodes, nodeId));
         setReRender((prev) => prev + 1);
+        navigate('/');
       });
     }
   }
@@ -122,6 +123,7 @@ function App() {
         onNewChat={() => {
           addRootNode();
         }}
+        onDeleteNode={deleteNode}
       />
       <Routes>
         <Route
