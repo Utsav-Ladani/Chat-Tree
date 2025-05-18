@@ -1,4 +1,3 @@
-import OpenAI from 'openai';
 import { AI_MODEL_OPTIONS } from '../utils/constants';
 
 export function getModelFromLocalStorage() {
@@ -28,20 +27,27 @@ export async function getLLMResponse(messages) {
 
     const apiKey = getApiKeyFromLocalStorage(model.modelIdentifier);
 
-    const client = new OpenAI({
-        baseURL: model.apiBaseUrl,
-        apiKey,
-        dangerouslyAllowBrowser: true,
-    });
-
-    const response = await client.chat.completions.create({
+    // Prepare the payload for OpenAI-compatible API
+    const payload = {
         model: model.modelName,
         messages,
+    };
+
+    const response = await fetch(`${model.apiBaseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(payload),
     });
 
-    console.log(response);
+    if (!response.ok) {
+        throw new Error(`LLM API error: ${response.statusText}`);
+    }
 
-    return response.choices[0].message.content;
+    const data = await response.json();
+    return data.choices[0].message.content;
 }
 
 export async function generateTitleFromFirstConversation(input, response) {
