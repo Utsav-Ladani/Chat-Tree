@@ -48,12 +48,12 @@ function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot 
     }
 
     return (
-        <div className="chat flex flex-col gap-3 border border-gray-300 rounded-md p-3 min-w-[400px] max-w-[700px]" ref={ref} tabIndex={0}>
+            <div className="chat flex flex-col gap-3 border border-gray-300 rounded-md p-3 min-w-[600px] max-w-[700px]" ref={ref} tabIndex={0}>
             <div className="flex gap-2 items-start">
                 <UserAvatar name={'user'} />
                 {
                     chat.user ? (
-                        <p className="text-blue-500 mt-[4px] w-full">{chat.user}</p>
+                        <pre className="text-blue-500 mt-[4px] w-full whitespace-pre-wrap">{chat.user}</pre>
                     ) : (
                         <ChatInput
                             onSubmit={handleUserInput}
