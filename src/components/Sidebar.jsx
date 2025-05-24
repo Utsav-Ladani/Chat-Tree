@@ -1,33 +1,52 @@
 import { Link, NavLink } from "react-router-dom";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Settings } from "lucide-react";
 import { useState } from "react";
 import SettingsModal from "./SettingsModal";
+import { SidebarOpen } from "lucide-react";
+import { SidebarClose } from "lucide-react";
+import { useSidebar } from "../hooks/useSidebar";
+import { PenBox } from "lucide-react";
 
 export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    const { isSidebarOpen, toggleSidebar } = useSidebar();
 
     return (
-        <aside className="flex flex-col bg-gray-100 py-2 w-72 border-r border-gray-200 h-screen">
-            <header className="flex justify-between items-center mb-4 px-4 py-2">
+        <aside className={`flex flex-col bg-gray-100 p-1 border-r border-gray-200 h-screen transition-w duration-300 ${isSidebarOpen ? "w-16 items-center" : "w-72"}`}>
+            <div className="h-16 flex justify-between items-center mb-4 px-2 py-2">
                 <Link to="/">
-                    <h2 className="text-2xl font-bold">Chat Trees 🌳</h2>
+                    <h1 className="text-2xl font-bold truncate">
+                        {isSidebarOpen ? '🌳' : '🌳 Chat Trees'}
+                    </h1>
                 </Link>
+                {
+                    !isSidebarOpen && (
+                        <button
+                            className="p-2 rounded hover:bg-gray-200 cursor-pointer"
+                            title={isSidebarOpen ? "Open Sidebar" : "Close Sidebar"}
+                            onClick={toggleSidebar}
+                        >
+                            {isSidebarOpen ? <SidebarOpen size={24} /> : <SidebarClose size={24} />}
+                        </button>
+                    )
+                }
+
+            </div>
+            <nav className="flex flex-col gap-1 overflow-y-auto px-2 h-full">
                 <button
-                    className="bg-black text-white p-1 rounded border border-gray-300 hover:bg-gray-200 hover:text-black hover:cursor-pointer"
+                    className="h-10 flex items-center justify-center bg-gray-200 text-black p-2 mb-4 rounded border border-gray-300 cursor-pointer hover:bg-gray-300 hover:text-black"
                     onClick={onNewChat}
                 >
-                    <Plus className="size-5" />
+                    <PenBox size={20} />
+                    {!isSidebarOpen && <span className="ml-2 truncate">New Chat</span>}
                 </button>
-            </header>
-            <nav className="flex flex-col gap-1 overflow-y-auto px-2 h-full">
-                {chatRootNodes.map((node) => (
+                {!isSidebarOpen && chatRootNodes.map((node) => (
                     <NavLink
                         key={node.id}
                         to={`/chat/${node.id}`}
                         className={({ isActive }) =>
-                            `flex items-center justify-between px-2 py-1 rounded capitalize transition-colors duration-150 cursor-pointer mb-1 ${
-                                isActive ? "bg-black text-white" : "hover:bg-gray-200 bg-transparent text-black"
+                            `flex items-center justify-between px-2 py-1 rounded capitalize transition-colors duration-150 cursor-pointer mb-1 ${isActive ? "bg-black text-white" : "hover:bg-gray-200 bg-transparent text-black"
                             }`
                         }
                         title={node.title || 'Untitled'}
@@ -48,14 +67,14 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                 ))}
             </nav>
             <button
-                className="mx-2 mt-2 block flex items-center w-fit bg-black text-white px-2 py-1 rounded border border-gray-600 hover:bg-gray-200 hover:text-black"
+                className="h-10 flex items-center justify-center bg-gray-200 text-black p-2 mb-2 mx-2 rounded border border-gray-300 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
                 title="Settings"
                 onClick={() => {
                     setIsSettingsOpen(true);
                 }}
             >
-                <Settings size={18} />
-                <span className="ml-2">Settings</span>
+                <Settings size={20} />
+                {!isSidebarOpen && <span className="ml-2 truncate">Settings</span>}
             </button>
             <SettingsModal
                 isOpen={isSettingsOpen}
