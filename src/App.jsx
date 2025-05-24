@@ -23,7 +23,11 @@ export default function App() {
   }
 
   function handleDeleteNode(nodeId) {
-    deleteNode(nodeId, () => navigate('/'));
+    deleteNode(nodeId, (deletedNode) => {
+      if (!deletedNode.parentId) {
+        navigate('/');
+      }
+    });
   }
 
   return (

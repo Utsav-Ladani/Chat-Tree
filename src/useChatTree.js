@@ -89,7 +89,7 @@ export default function useChatTree() {
       deleteNodeRecursive(nodeToDelete).then(() => {
         setChatRootNodes((rootNodes) => deleteNodeFromTree(rootNodes, nodeId));
         setReRender((prev) => prev + 1);
-        if (onDeleted) onDeleted();
+        if (onDeleted) onDeleted(nodeToDelete);
       });
     }
   }
