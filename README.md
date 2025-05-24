@@ -1,6 +1,6 @@
 # Chat Trees 🌳
 
-A minimal web app to create, explore, and branch chat conversations as a tree.
+Chat Trees: A web application for creating, visualizing, and navigating branching conversation trees. Designed to help manage and explore non-linear discussions effectively.
 
 # Demo
 
