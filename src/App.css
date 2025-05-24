@@ -39,20 +39,19 @@ body {
     list-style-type: decimal;
   }
 
-  code {
+  pre {
+    max-width: 100%;
+  }
+
+  .code--no-syntax-highlighted {
     padding: 0.1rem 0.2rem;
     color: #e5c07b;
     background-color: #282c34;
     border-radius: 0.3rem;
   }
 
-  pre>code {
-    display: block;
-    border: 1px solid #3a3f4b;
-    padding: .5rem 1rem;
-    margin-block: 1rem;
-    border-radius: 0.3rem;
-    white-space: pre-wrap;
+  .code--syntax-highlighted code {
+    white-space: pre-wrap !important;
   }
 
   hr {

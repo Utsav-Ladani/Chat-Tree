@@ -1,4 +1,3 @@
-import Markdown from 'react-markdown'
 import { Trash2, Plus } from "lucide-react";
 
 import UserAvatar from "./UserAvatar";
@@ -7,6 +6,8 @@ import ChatInput from "./ChatInput";
 import { saveConversation, getAllConversations } from "../db/conversation";
 import { buildMessageHistory } from "../utils/conversationHistory";
 import { useNavigate } from 'react-router-dom';
+import Chat from './Chat';
+import ChatLoading from "./ChatLoading";
 
 function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot }) {
     const navigate = useNavigate();
@@ -43,17 +44,17 @@ function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot 
             }
         } catch (error) {
             console.error(error)
-            updateNodeData(chat.id, { assistant: 'Error while generating response',});  
+            updateNodeData(chat.id, { assistant: 'Error while generating response', });
         }
     }
 
     return (
-            <div className="chat flex flex-col gap-3 border border-gray-300 rounded-md p-3 min-w-[600px] max-w-[700px]" ref={ref} tabIndex={0}>
+        <div className="chat flex flex-col gap-3 border border-gray-300 rounded-md p-3 min-w-[600px] max-w-[700px]" ref={ref} tabIndex={0}>
             <div className="flex gap-2 items-start">
                 <UserAvatar name={'user'} />
                 {
                     chat.user ? (
-                        <pre className="text-blue-500 mt-[4px] w-full whitespace-pre-wrap">{chat.user}</pre>
+                        <p className="text-blue-500 mt-[4px] w-full whitespace-pre-line">{chat.user}</p>
                     ) : (
                         <ChatInput
                             onSubmit={handleUserInput}
@@ -79,10 +80,10 @@ function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot 
                         {
                             chat.assistant ? (
                                 <div className="markdown-body mt-[4px]">
-                                    <Markdown>{chat.assistant}</Markdown>
+                                    <Chat message={chat.assistant} />
                                 </div>
                             ) : (
-                                <ChatCardLoading />
+                                <ChatLoading />
                             )
                         }
                     </div>
@@ -100,16 +101,6 @@ function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot 
             }
         </div>
     );
-}
-
-function ChatCardLoading() {
-    return (
-        <div className="self-center flex gap-2 items-start">
-            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
-            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
-            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
-        </div>
-    )
 }
 
 export default ChatCard;
