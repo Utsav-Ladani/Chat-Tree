@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/chat/:id",
+      "destination": "/"
+    }
+  ]
+}
