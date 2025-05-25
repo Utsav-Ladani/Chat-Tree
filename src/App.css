@@ -59,3 +59,30 @@ body {
     color: #cfcfcf;
   }
 }
+
+#model-select,
+#model-select::picker(select) {
+  appearance: base-select;
+}
+
+#model-select::picker(select) {
+  border-color: #c6c6c6;
+  border-radius: 4px;
+  margin-top: 6px;
+}
+
+#model-select > option::checkmark {
+  content: "✅";
+}
+
+#model-select::picker-icon {
+  transition: 0.4s rotate;
+  transform-origin: center;
+  height: fit-content;
+  width: fit-content;
+  margin-block: auto;
+}
+
+#model-select:open::picker-icon {
+  rotate: 120deg;
+}

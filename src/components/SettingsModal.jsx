@@ -49,24 +49,35 @@ export default function SettingsModal({ isOpen, onClose }) {
                     <label htmlFor="model-select" className="text-sm text-gray-500">Model:</label>
                     <select
                         id="model-select"
-                        className="border border-gray-300 rounded px-2 py-1"
+                        className="border border-gray-300 rounded px-2 py-2"
                         value={modelIdentifier}
                         onChange={handleModelChange}
                     >
+                        <button>
+                            <selectedcontent></selectedcontent>
+                        </button>
+
                         {AI_MODEL_OPTIONS.map((option) => (
-                            <option key={option.modelIdentifier} value={option.modelIdentifier}>
-                                {option.provider} - {option.modelLabel}
+                            <option
+                                key={option.modelIdentifier}
+                                value={option.modelIdentifier}
+                                className="py-2 px-2 checked:bg-blue-100 not-checked:hover:bg-gray-100"
+                            >
+                                <div>
+                                    <div className="provider text-sm text-gray-500">{option.provider} </div>
+                                    <div>{option.modelLabel}</div>
+                                </div>
                             </option>
                         ))}
                     </select>
                 </div>
                 <div className="flex flex-col gap-2">
-                    <label htmlFor="api-key-input" className="text-sm text-gray-500">API Key:</label>
+                    <label htmlFor="api-key-input" className="text-sm text-gray-500">Model API Key:</label>
                     <input
                         id="api-key-input"
                         type="password"
                         className="border border-gray-300 rounded px-2 py-1"
-                        placeholder="Enter your API key"
+                        placeholder="Enter your model API key"
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
                     />
