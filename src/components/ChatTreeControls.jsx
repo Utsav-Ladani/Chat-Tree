@@ -8,6 +8,7 @@ export default function ChatTreeControls({ zoom, onZoomIn, onZoomOut, isZoomInDi
                 onClick={onZoomOut}
                 className={`p-2 bg-white text-black border border-black rounded-md disabled:opacity-70 disabled:cursor-not-allowed ${!isZoomOutDisabled ? 'hover:bg-gray-200' : ''}`}
                 disabled={isZoomOutDisabled}
+                title="Zoom out (Cmd + mouse wheel down)"
             >
                 <ZoomOut size={16} />
             </button>
@@ -18,6 +19,7 @@ export default function ChatTreeControls({ zoom, onZoomIn, onZoomOut, isZoomInDi
                 onClick={onZoomIn}
                 className={`p-2 bg-white text-black border border-black rounded-md disabled:opacity-70 disabled:cursor-not-allowed ${!isZoomInDisabled ? 'hover:bg-gray-200' : ''}`}
                 disabled={isZoomInDisabled}
+                title="Zoom in (Cmd + mouse wheel up)"
             >
                 <ZoomIn size={16} />
             </button>
