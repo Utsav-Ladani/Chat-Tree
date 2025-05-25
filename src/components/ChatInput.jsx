@@ -1,3 +1,4 @@
+import { SendHorizonal } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 export default function ChatInput({ onSubmit }) {
@@ -65,7 +66,13 @@ export default function ChatInput({ onSubmit }) {
                 placeholder="Type your message here..."
                 rows={1}
             />
-            <button type="submit" className="bg-blue-500 text-white rounded-md px-2 py-1">Send</button>
+            <button
+                type="submit"
+                className="bg-blue-500 text-white rounded-md p-2 cursor-pointer"
+                title="Send message"
+            >
+                <SendHorizonal size={18} />
+            </button>
         </form>
     );
 }
