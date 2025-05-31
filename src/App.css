@@ -86,3 +86,7 @@ body {
 #model-select:open::picker-icon {
   rotate: 120deg;
 }
+
+.hidden-input-chars {
+  -webkit-text-security: disc;
+}

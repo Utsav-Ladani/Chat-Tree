@@ -1,18 +1,12 @@
-export const AI_MODEL_OPTIONS = [
+export const MODEL_PROVIDERS = [
     {
-        provider: 'Google',
-        modelLabel: 'Gemini 2.0 Flash',
-        modelName: 'gemini-2.0-flash',
-        modelIdentifier: 'google-gemini-2.0-flash',
-        supportsCORS: true,
+        id: 'google',
+        name: 'Google',
         apiBaseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai'
     },
     {
-        provider: 'OpenAI',
-        modelLabel: 'GPT 4o mini',
-        modelName: 'gpt-4o-mini',
-        modelIdentifier: 'openai-gpt-4o-mini',
-        supportsCORS: true,
+        id: 'openai',
+        name: 'OpenAI',
         apiBaseUrl: 'https://api.openai.com/v1'
-    },
+    }
 ]

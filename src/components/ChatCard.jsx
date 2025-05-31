@@ -37,8 +37,6 @@ function ChatCard({ chat, ref, onAddChild, updateNodeData, onDeleteNode, isRoot 
                 updateNodeData(chat.id, { id: saved.id });
             }
 
-            console.log(chat.parentId, saved.id, chat.parentId === null);
-
             if (chat.parentId === null) {
                 navigate(`/chat/${saved.id}`);
             }

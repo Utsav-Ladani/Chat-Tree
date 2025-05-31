@@ -1,39 +1,75 @@
-import { AI_MODEL_OPTIONS } from '../utils/constants';
+import { MODEL_PROVIDERS } from "../utils/constants";
 
-export function getModelFromLocalStorage() {
-    const modelIdentifier = localStorage.getItem('llm:model-identifier') || AI_MODEL_OPTIONS[0].modelIdentifier;
-
-    return AI_MODEL_OPTIONS.find(m => m.modelIdentifier === modelIdentifier);
+export function getModelSelectionFromLocalStorage() {
+    return {
+        modelId: localStorage.getItem('llm:selected-model-id'),
+        providerId: localStorage.getItem('llm:selected-provider-id'),
+    }
 }
 
-export function setModelToLocalStorage(modelIdentifier) {
-    localStorage.setItem('llm:model-identifier', modelIdentifier);
+export function setModelSelectionToLocalStorage(providerId, modelId) {
+    localStorage.setItem('llm:selected-provider-id', providerId);
+    localStorage.setItem('llm:selected-model-id', modelId);
 }
 
-export function getApiKeyFromLocalStorage(modelIdentifier) {
-    return localStorage.getItem(`llm:${modelIdentifier}:api-key`) || '';
+export function getApiKeyFromLocalStorage(providerId) {
+    return localStorage.getItem(`llm:${providerId}:api-key`) || '';
 }
 
-export function setApiKeyToLocalStorage(modelIdentifier, apiKey) {
-    localStorage.setItem(`llm:${modelIdentifier}:api-key`, apiKey);
+export function setApiKeyToLocalStorage(providerId, apiKey) {
+    localStorage.setItem(`llm:${providerId}:api-key`, apiKey);
+}
+
+export async function fetchModels(providerId) {
+    const apiKey = getApiKeyFromLocalStorage(providerId);
+
+    if (!apiKey) {
+        return []
+    }
+
+    const provider = MODEL_PROVIDERS.find(p => p.id === providerId);
+
+    const response = await fetch(`${provider.apiBaseUrl}/models`, {
+        headers: {
+            'Authorization': `Bearer ${apiKey}`,
+        },
+    });
+
+    if (!response.ok) {
+        console.error(`LLM API error: ${response.statusText}`);
+        return []
+    }
+
+    const json = await response.json();
+
+    return json.data.map(model => ({
+        id: model.id,
+        name: model.name,
+    }));
 }
 
 export async function getLLMResponse(messages) {
-    const model = getModelFromLocalStorage();
+    const modelSelection = getModelSelectionFromLocalStorage();
 
-    if (!model) {
-        throw new Error('Model not found');
+    if (!modelSelection?.modelId) {
+        throw new Error('No model selected');
     }
 
-    const apiKey = getApiKeyFromLocalStorage(model.modelIdentifier);
+    const provider = MODEL_PROVIDERS.find(p => p.id === modelSelection?.providerId);
+
+    if (!provider) {
+        throw new Error('Provider not found');
+    }
+
+    const apiKey = getApiKeyFromLocalStorage(provider.id);
 
     // Prepare the payload for OpenAI-compatible API
     const payload = {
-        model: model.modelName,
+        model: modelSelection.modelId,
         messages,
     };
 
-    const response = await fetch(`${model.apiBaseUrl}/chat/completions`, {
+    const response = await fetch(`${provider.apiBaseUrl}/chat/completions`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
