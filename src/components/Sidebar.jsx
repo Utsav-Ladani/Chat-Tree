@@ -7,8 +7,10 @@ import { SidebarOpen } from "lucide-react";
 import { SidebarClose } from "lucide-react";
 import { useSidebar } from "../hooks/useSidebar";
 import { PenBox } from "lucide-react";
+import ModelSelection from "./ModelSelection";
 
 export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
+
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const { isSidebarOpen, toggleSidebar } = useSidebar();
 
@@ -66,6 +68,7 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                     </NavLink>
                 ))}
             </nav>
+            {!isSidebarOpen && <ModelSelection />}
             <button
                 className="h-10 flex items-center justify-center bg-gray-200 text-black p-2 mb-2 mx-2 rounded border border-gray-300 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
                 title="Settings"
@@ -74,7 +77,7 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                 }}
             >
                 <Settings size={20} />
-                {!isSidebarOpen && <span className="ml-2 truncate">Settings</span>}
+                {!isSidebarOpen && <span className="ml-2 truncate">Change Model</span>}
             </button>
             <SettingsModal
                 isOpen={isSettingsOpen}
