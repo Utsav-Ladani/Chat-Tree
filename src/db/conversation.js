@@ -1,17 +1,4 @@
-import { openDB } from 'idb';
-
-const DB_NAME = 'chatDB';
-const STORE_NAME = 'conversations';
-
-async function getDB() {
-    return openDB(DB_NAME, 1, {
-        upgrade(db) {
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
-            }
-        },
-    });
-}
+import { CHAT_TREES_STORE_NAME as STORE_NAME, getDB } from '.';
 
 export async function saveConversation(conversation) {
     const db = await getDB();

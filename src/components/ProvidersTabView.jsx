@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useContext } from "react";
-import { fetchModels, getApiKeyFromLocalStorage, setApiKeyToLocalStorage } from "../LLM";
+import { fetchModelsFromProvider, getApiKeyFromLocalStorage, setApiKeyToLocalStorage } from "../LLM";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { X } from "lucide-react";
 import { ModelSelectionContext, TabViewContext } from "../contexts";
+import { getModelsFromIndexedDB, saveModelsToIndexedDB } from "../db/model";
 
 export function ProvidersTabView({ children, providers, onClose }) {
     const { modelSelection } = useContext(ModelSelectionContext);
@@ -55,9 +56,9 @@ export function ProviderTab({ provider }) {
 
         let isUnmounted = false;
 
-        async function updateModels() {
+        async function fetchModels() {
             setIsLoading(true);
-            const models = await fetchModels(provider.id);
+            const models = await getModelsFromIndexedDB(provider.id);
 
             if (isUnmounted) {
                 return;
@@ -67,7 +68,7 @@ export function ProviderTab({ provider }) {
             setIsLoading(false);
         }
 
-        updateModels();
+        fetchModels();
 
         return () => {
             isUnmounted = true;
@@ -92,7 +93,9 @@ export function ProviderTab({ provider }) {
         setIsLoading(true);
         setApiKeyToLocalStorage(provider.id, apiKey);
 
-        const models = await fetchModels(provider.id);
+        const models = await fetchModelsFromProvider(provider.id);
+
+        await saveModelsToIndexedDB(provider.id, models);
 
         setModels(models);
         setIsLoading(false);
@@ -131,7 +134,7 @@ export function ProviderTab({ provider }) {
                                 <li
                                     key={model.id}
                                     className={`py-1 px-2 cursor-pointer ${model.id === modelSelection.modelId ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
-                                    onClick={() => handleModelSelection(provider.id,model.id )}
+                                    onClick={() => handleModelSelection(provider.id, model.id)}
                                 >
                                     {model.id} {model.id === modelSelection.modelId && "✅"}
                                 </li>

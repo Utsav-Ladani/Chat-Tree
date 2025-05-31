@@ -20,7 +20,7 @@ export function setApiKeyToLocalStorage(providerId, apiKey) {
     localStorage.setItem(`llm:${providerId}:api-key`, apiKey);
 }
 
-export async function fetchModels(providerId) {
+export async function fetchModelsFromProvider(providerId) {
     const apiKey = getApiKeyFromLocalStorage(providerId);
 
     if (!apiKey) {
