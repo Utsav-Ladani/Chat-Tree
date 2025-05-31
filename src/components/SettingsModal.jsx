@@ -1,5 +1,6 @@
 import { MODEL_PROVIDERS } from "../utils/constants";
-import {ProvidersTabView, ProviderTab} from "./ProvidersTabView";
+import {ProvidersTabView} from "./ProvidersTabView";
+import { ProviderTab } from "./ProviderTab";
 
 export default function SettingsModal({ isOpen, onClose }) {
     if (!isOpen) return null;
