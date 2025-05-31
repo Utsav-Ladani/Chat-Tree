@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { SidebarContext } from './sidebar';
+import { SidebarContext } from '../contexts';
 
 const SIDEBAR_STATE_KEY = 'ui:is-sidebar-open';
 

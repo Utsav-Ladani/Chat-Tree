@@ -4,7 +4,7 @@ import WelcomeScreen from './components/WelcomeScreen';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import useChatTree from './useChatTree';
 import './App.css';
-import { SidebarProvider } from './contexts/SidebarContext';
+import { SidebarProvider } from './components/SidebarContext';
 
 export default function App() {
   const {
