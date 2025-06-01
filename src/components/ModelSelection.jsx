@@ -11,14 +11,10 @@ export default function ModelSelection() {
     const { modelSelection } = useContext(ModelSelectionContext);
     const [isModelSelectorOpen, setIsModelSelectorOpen] = useState(false);
 
-    if (!modelSelection?.providerId || !modelSelection?.modelId) {
-        return null;
-    }
-
     return (
         <>
             {
-                isSidebarOpen && (
+                isSidebarOpen && modelSelection?.providerId && modelSelection?.modelId && (
                     <div className="flex flex-col mx-2 pt-2 border-t border-gray-400">
                         <div className="font-bold">Selected Model</div>
                         <span className="text-sm text-gray-500 font-bold">{MODEL_PROVIDERS.find(provider => provider.id === modelSelection.providerId)?.name}</span>
