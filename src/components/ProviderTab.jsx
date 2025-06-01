@@ -73,8 +73,15 @@ export function ProviderTab({ provider }) {
 
     if (!filteredModels?.length) {
         return (
-            <div className="flex gap-2 justify-center items-center w-120 h-[300px]">
-                <p>No models found from <strong>{provider.name}</strong>. Please check your API key.</p>
+            <div className="flex flex-col gap-2 justify-center items-center w-120 h-[300px]">
+                <p className="text-center">No models found from <strong>{provider.name}</strong>. Please check your API key or try refreshing the list.</p>
+                <button
+                    className="bg-black text-white px-2 py-1 rounded-sm whitespace-nowrap cursor-pointer"
+                    onClick={handleModelRefresh}
+                    title="Refresh models list"
+                >
+                    <RefreshCcw size={16} />
+                </button>
             </div>
         )
     }
@@ -90,7 +97,7 @@ export function ProviderTab({ provider }) {
                     onChange={(e) => setSearch(e.target.value.toLowerCase())}
                 />
                 <button
-                    className="bg-black text-white px-2 py-1 rounded-sm whitespace-nowrap"
+                    className="bg-black text-white px-2 py-1 rounded-sm whitespace-nowrap cursor-pointer"
                     onClick={handleModelRefresh}
                     title="Refresh models list"
                 >

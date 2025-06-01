@@ -16,15 +16,15 @@ export function ProvidersTabView({ children, providers, onClose }) {
                         {providers.map((provider) => (
                             <button
                                 key={provider.id}
-                                className={`px-2 py-1 rounded-t-sm ${activeTabId === provider.id ? 'bg-black text-white' : ''}`}
+                                className={`px-3 py-1 rounded-t-sm cursor-pointer ${activeTabId === provider.id ? 'bg-black text-white' : 'hover:bg-gray-300'}`}
                                 onClick={() => setActiveTabId(provider.id)}
                             >
                                 {provider.name}
                             </button>
                         ))}
                     </div>
-                    <button onClick={onClose}>
-                        <X />
+                    <button className="cursor-pointer text-gray-500 hover:text-black" onClick={onClose}>
+                        <X size={18} />
                     </button>
                 </div>
                 <div className="px-4">

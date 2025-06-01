@@ -12,7 +12,7 @@ export default function SettingsModal({ isOpen, onClose }) {
     return (
         <div className="fixed inset-0 z-2 flex items-center justify-center bg-black/80">
             <form
-                className="flex flex-col gap-2 items-start h-[300px] w-[500px] bg-white rounded-sm"
+                className="flex flex-col items-start h-[300px] w-[500px] bg-white rounded-sm"
                 onSubmit={handleSubmit}
             >
                 <div className="flex justify-between items-center border-b-2 border-gray-300 px-4 py-2 w-full">
@@ -24,7 +24,7 @@ export default function SettingsModal({ isOpen, onClose }) {
                         <X size={20} />
                     </button>
                 </div>
-                <ul className="flex flex-col gap-2 w-full flex-1 px-4">
+                <ul className="flex flex-col gap-2 w-full flex-1 px-4 py-2 overflow-y-auto">
                     {MODEL_PROVIDERS.map(provider => (
                         <ProviderSettings
                             key={provider.id}
