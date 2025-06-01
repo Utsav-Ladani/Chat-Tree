@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useContext } from "react";
-import { fetchModelsFromProvider, getApiKeyFromLocalStorage, setApiKeyToLocalStorage } from "../LLM";
 import { useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { ModelSelectionContext, TabViewContext } from "../contexts";
 import { getModelsFromIndexedDB, saveModelsToIndexedDB } from "../db/model";
+import { RefreshCcw } from "lucide-react";
+import { fetchModelsFromProvider } from "../LLM";
 
 export function ProviderTab({ provider }) {
     const { activeTabId } = useContext(TabViewContext);
     const { modelSelection, handleModelSelection } = useContext(ModelSelectionContext);
 
-    const [apiKey, setApiKey] = useState(() => getApiKeyFromLocalStorage(provider.id));
     const [isLoading, setIsLoading] = useState(false);
     const [models, setModels] = useState([]);
     const [search, setSearch] = useState('');
@@ -50,15 +50,9 @@ export function ProviderTab({ provider }) {
         return null;
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!apiKey) {
-            return;
-        }
-
+    const handleModelRefresh = async () => {
         setIsLoading(true);
-        setApiKeyToLocalStorage(provider.id, apiKey);
+        setSearch('');
 
         const models = await fetchModelsFromProvider(provider.id);
 
@@ -68,47 +62,52 @@ export function ProviderTab({ provider }) {
         setIsLoading(false);
     }
 
+    if (isLoading) {
+        return (
+            <div className="flex gap-2 justify-center items-center w-120 h-[300px]">
+                <Loader2 className="animate-spin" />
+                <span>Loading models</span>
+            </div>
+        )
+    }
+
+    if (!filteredModels?.length) {
+        return (
+            <div className="flex gap-2 justify-center items-center w-120 h-[300px]">
+                <p>No models found from <strong>{provider.name}</strong>. Please check your API key.</p>
+            </div>
+        )
+    }
+
     return (
-        <div className="flex flex-col gap-2 w-120">
-            <form className="flex gap-2" onSubmit={handleSubmit}>
+        <div className="flex flex-col gap-2 w-120 h-[300px]">
+            <div className="flex gap-2">
                 <input
                     type="text"
-                    placeholder={`Enter ${provider.name} API Key`}
-                    className="hidden-input-chars w-full border border-gray-300 rounded-sm px-2 py-1"
-                    spellCheck={false}
-                    autoComplete="off"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
+                    placeholder="Search models"
+                    className="w-full border border-gray-300 rounded-sm px-2 py-1"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value.toLowerCase())}
                 />
-                <button className="bg-black text-white px-2 py-1 rounded-sm whitespace-nowrap">Save & Refresh</button>
-            </form>
-            {
-                isLoading ?
-                    <div className="flex gap-2 justify-center items-center h-[300px]">
-                        <Loader2 className="animate-spin" />
-                        <span>Loading models</span>
-                    </div> :
-                    <div className="flex flex-col gap-2 h-[300px]">
-                        <input
-                            type="text"
-                            placeholder="Search models"
-                            className="w-full border border-gray-300 rounded-sm px-2 py-1"
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value.toLowerCase())}
-                        />
-                        <ul className="h-full overflow-y-auto">
-                            {filteredModels.map((model) => (
-                                <li
-                                    key={model.id}
-                                    className={`py-1 px-2 cursor-pointer ${model.id === modelSelection.modelId ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
-                                    onClick={() => handleModelSelection(provider.id, model.id)}
-                                >
-                                    {model.id} {model.id === modelSelection.modelId && "✅"}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-            }
+                <button
+                    className="bg-black text-white px-2 py-1 rounded-sm whitespace-nowrap"
+                    onClick={handleModelRefresh}
+                    title="Refresh models list"
+                >
+                    <RefreshCcw size={16} />
+                </button>
+            </div>
+            <ul className="h-full overflow-y-auto">
+                {filteredModels.map((model) => (
+                    <li
+                        key={model.id}
+                        className={`py-1 px-2 cursor-pointer ${model.id === modelSelection.modelId ? 'bg-black text-white' : 'hover:bg-gray-100'}`}
+                        onClick={() => handleModelSelection(provider.id, model.id)}
+                    >
+                        {model.id} {model.id === modelSelection.modelId && "✅"}
+                    </li>
+                ))}
+            </ul>
         </div>
     )
 }

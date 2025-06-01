@@ -25,7 +25,7 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                 {
                     !isSidebarOpen && (
                         <button
-                            className="p-2 rounded hover:bg-gray-200 cursor-pointer"
+                            className="p-2 rounded cursor-pointer hover:bg-gray-200"
                             title={isSidebarOpen ? "Open Sidebar" : "Close Sidebar"}
                             onClick={toggleSidebar}
                         >
@@ -37,10 +37,10 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
             </div>
             <nav className="flex flex-col gap-1 overflow-y-auto px-2 h-full">
                 <button
-                    className="h-10 flex items-center justify-center bg-gray-200 text-black p-2 mb-4 rounded border border-gray-300 cursor-pointer hover:bg-gray-300 hover:text-black"
+                    className="flex items-center justify-center bg-black text-white text-sm font-medium p-2 mb-4 rounded cursor-pointer hover:bg-gray-800"
                     onClick={onNewChat}
                 >
-                    <PenBox size={20} />
+                    <PenBox size={18} />
                     {!isSidebarOpen && <span className="ml-2 truncate">New Chat</span>}
                 </button>
                 {!isSidebarOpen && chatRootNodes.map((node) => (
@@ -70,14 +70,14 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
             </nav>
             {!isSidebarOpen && <ModelSelection />}
             <button
-                className="h-10 flex items-center justify-center bg-gray-200 text-black p-2 mb-2 mx-2 rounded border border-gray-300 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
+                className="flex items-center text-sm font-medium justify-center bg-black text-white p-2 mb-2 mx-2 rounded cursor-pointer hover:bg-gray-800"
                 title="Settings"
                 onClick={() => {
                     setIsSettingsOpen(true);
                 }}
             >
-                <Settings size={20} />
-                {!isSidebarOpen && <span className="ml-2 truncate">Change Model</span>}
+                <Settings size={18} />
+                {!isSidebarOpen && <span className="ml-2 truncate">Settings</span>}
             </button>
             <SettingsModal
                 isOpen={isSettingsOpen}
