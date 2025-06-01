@@ -7,7 +7,7 @@ export default function ChatHeader({ title }) {
     return (
         <header className="h-16 flex justify-start gap-4 items-center p-4 bg-gray-100 border-b border-gray-200">
             {
-                isSidebarOpen && (
+                !isSidebarOpen && (
                     <button
                         className="p-2 rounded hover:bg-gray-200 cursor-pointer"
                         title="Open Sidebar"

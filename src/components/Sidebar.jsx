@@ -10,26 +10,25 @@ import { PenBox } from "lucide-react";
 import ModelSelection from "./ModelSelection";
 
 export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
-
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const { isSidebarOpen, toggleSidebar } = useSidebar();
 
     return (
-        <aside className={`flex flex-col bg-gray-100 p-1 border-r border-gray-200 h-screen transition-w duration-300 ${isSidebarOpen ? "w-16 items-center" : "w-72"}`}>
+        <aside className={`flex flex-col bg-gray-100 p-1 border-r border-gray-200 h-screen transition-w duration-300 ${isSidebarOpen ? "w-72" : "w-16 items-center"}`}>
             <div className="h-16 flex justify-between items-center mb-4 px-2 py-2">
                 <Link to="/">
                     <h1 className="text-2xl font-bold truncate">
-                        {isSidebarOpen ? '🌳' : '🌳 Chat Trees'}
+                        {isSidebarOpen ? '🌳 Chat Trees' : '🌳'}
                     </h1>
                 </Link>
                 {
-                    !isSidebarOpen && (
+                    isSidebarOpen && (
                         <button
                             className="p-2 rounded cursor-pointer hover:bg-gray-200"
-                            title={isSidebarOpen ? "Open Sidebar" : "Close Sidebar"}
+                            title={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
                             onClick={toggleSidebar}
                         >
-                            {isSidebarOpen ? <SidebarOpen size={24} /> : <SidebarClose size={24} />}
+                            {isSidebarOpen ? <SidebarClose size={24} /> : <SidebarOpen size={24} />}
                         </button>
                     )
                 }
@@ -41,9 +40,9 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                     onClick={onNewChat}
                 >
                     <PenBox size={18} />
-                    {!isSidebarOpen && <span className="ml-2 truncate">New Chat</span>}
+                    {isSidebarOpen && <span className="ml-2 truncate">New Chat</span>}
                 </button>
-                {!isSidebarOpen && chatRootNodes.map((node) => (
+                {isSidebarOpen && chatRootNodes.map((node) => (
                     <NavLink
                         key={node.id}
                         to={`/chat/${node.id}`}
@@ -68,7 +67,7 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                     </NavLink>
                 ))}
             </nav>
-            {!isSidebarOpen && <ModelSelection />}
+            <ModelSelection />
             <button
                 className="flex items-center text-sm font-medium justify-center bg-black text-white p-2 mb-2 mx-2 rounded cursor-pointer hover:bg-gray-800"
                 title="Settings"
@@ -77,7 +76,7 @@ export default function Sidebar({ chatRootNodes, onNewChat, onDeleteNode }) {
                 }}
             >
                 <Settings size={18} />
-                {!isSidebarOpen && <span className="ml-2 truncate">Settings</span>}
+                {isSidebarOpen && <span className="ml-2 truncate">Settings</span>}
             </button>
             <SettingsModal
                 isOpen={isSettingsOpen}
