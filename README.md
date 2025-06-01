@@ -4,7 +4,7 @@ Chat Trees: A web application for creating, visualizing, and navigating branchin
 
 # Demo
 
-https://github.com/user-attachments/assets/6c4cbb04-09a2-42ec-b9fa-e5d7b79223f2
+https://github.com/user-attachments/assets/a465339a-9a3f-478d-bdcb-a2c0fadba9bd
 
 ## Getting Started
 
