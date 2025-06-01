@@ -5,7 +5,7 @@ const SIDEBAR_STATE_KEY = 'ui:is-sidebar-open';
 
 export function SidebarProvider({ children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(
-        () => localStorage.getItem(SIDEBAR_STATE_KEY) === 'false'
+        () => localStorage.getItem(SIDEBAR_STATE_KEY) !== 'false'
     );
 
     const toggleSidebar = () => {
