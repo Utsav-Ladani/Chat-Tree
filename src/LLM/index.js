@@ -90,7 +90,7 @@ export async function generateTitleFromFirstConversation(input, response) {
     return await getLLMResponse([
         {
             role: 'system',
-            content: `You are a helpful assistant that generates title less than 10 words for given conversation.`,
+            content: `You are a helpful assistant that generates title less than 10 words for given conversation without any formatting.`,
         },
         {
             role: 'user',
